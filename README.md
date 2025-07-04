@@ -8,12 +8,12 @@ Traefik plugin to handle traffic coming from Cloudflare. Forked from [agence-gay
 
 * Only allow traffic originating from Cloudflare IP v4 and v6 
 * Custom CIDRs list can be added to allow request not from CloudFlare 
-* Refresh Clouflare CIDRs from Cloudflare API url https://api.cloudflare.com/client/v4/ips
+* Refresh Cloudflare CIDRs from Cloudflare API url https://api.cloudflare.com/client/v4/ips
 * Handle `X-Forwarded-For` original header to allow Cloudflare request from a trusted revers proxy behind Traefik
 * Rewrite requests `X-Forwarded-For` header with the user IP provided by `CF-Connecting-IP`
 * Rewrite requests `X-Forwarded-Proto` header with the scheme provided by `CF-Visitor`
 * Rewrite requests `X-Real-IP` header with the user IP provided by `CF-Connecting-IP`
-* Rewrite RemoteAdress to permit Traefik ipwhitelist middleware to work on IP provided by `CF-Connecting-IP`
+* Rewrite RemoteAddress to permit Traefik ipwhitelist middleware to work on IP provided by `CF-Connecting-IP`
 
 ## Configuration
 
@@ -34,7 +34,7 @@ Traefik plugin to handle traffic coming from Cloudflare. Forked from [agence-gay
 experimental:
   plugins:
     cloudflare:
-      moduleName: github.com/agence-gaya/traefik-plugin-cloudflare
+      moduleName: github.com/Cyb3r-Jak3/traefik-plugin-cloudflare
       version: v1.0.0
 ```
 
@@ -59,11 +59,11 @@ http:
         - cloudflare
 ```
 
-[Tag]: https://github.com/agence-gaya/traefik-plugin-cloudflare/tags
-[Tag Badge]: https://img.shields.io/github/v/tag/agence-gaya/traefik-plugin-cloudflare?sort=semver
+[Tag]: https://github.com/Cyb3r-Jak3/traefik-plugin-cloudflare/tags
+[Tag Badge]: https://img.shields.io/github/v/tag/Cyb3r-Jak3/traefik-plugin-cloudflare?sort=semver
 [Go Version]: /go.mod
-[Go Version Badge]: https://img.shields.io/github/go-mod/go-version/agence-gaya/traefik-plugin-cloudflare
-[Build]: https://github.com/agence-gaya/traefik-plugin-cloudflare/actions/workflows/test.yml
-[Build Badge]: https://img.shields.io/github/actions/workflow/status/agence-gaya/traefik-plugin-cloudflare/test.yml
-[Go Report Card]: https://goreportcard.com/report/github.com/agence-gaya/traefik-plugin-cloudflare
-[Go Report Card Badge]: https://goreportcard.com/badge/github.com/agence-gaya/traefik-plugin-cloudflare
+[Go Version Badge]: https://img.shields.io/github/go-mod/go-version/Cyb3r-Jak3/traefik-plugin-cloudflare
+[Build]: https://github.com/Cyb3r-Jak3/traefik-plugin-cloudflare/actions/workflows/test.yml
+[Build Badge]: https://img.shields.io/github/actions/workflow/status/Cyb3r-Jak3/traefik-plugin-cloudflare/test.yml
+[Go Report Card]: https://goreportcard.com/report/github.com/Cyb3r-Jak3/traefik-plugin-cloudflare
+[Go Report Card Badge]: https://goreportcard.com/badge/github.com/Cyb3r-Jak3/traefik-plugin-cloudflare
