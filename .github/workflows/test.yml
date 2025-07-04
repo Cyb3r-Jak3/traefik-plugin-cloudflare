@@ -11,7 +11,7 @@ jobs:
   test:
     env:
       # renovate: datasource=github-tags depName=golangci/golangci-lint versioning=semver
-      GOLANGCI_LINT_VERSION: v2.2.0
+      GOLANGCI_LINT_VERSION: v2.2.1
       # renovate: datasource=github-tags depName=traefik/yaegi versioning=semver
       YAEGI_VERSION: v0.16.1
       GOPATH: ${{ github.workspace }}/go
