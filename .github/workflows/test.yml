@@ -1,0 +1,71 @@
+name: Test
+on: [push, pull_request]
+
+permissions:
+  security-events: write
+  contents: read
+  id-token: write
+  attestations: write
+
+jobs:
+  test:
+    env:
+      # renovate: datasource=github-tags depName=golangci/golangci-lint versioning=semver
+      GOLANGCI_LINT_VERSION: v2.2.0
+      # renovate: datasource=github-tags depName=traefik/yaegi versioning=semver
+      YAEGI_VERSION: v0.16.1
+      GOPATH: ${{ github.workspace }}/go
+      CGO_ENABLED: 0
+      GO111MODULE: on
+    defaults:
+      run:
+        working-directory: ${{ github.workspace }}/go/src/github.com/${{ github.repository }}
+    runs-on: ubuntu-latest
+    steps:
+
+      - uses: actions/checkout@v4
+        with:
+          path: go/src/github.com/${{ github.repository }}
+          fetch-depth: 0
+
+      - name: Setup Go
+        uses: actions/setup-go@v3
+        with:
+          go-version-file: go/src/github.com/${{ github.repository }}/go.mod
+
+      - name: Install golangci-lint ${{ env.GOLANGCI_LINT_VERSION }}
+        run: curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b ${{ github.workspace }}/go/bin ${GOLANGCI_LINT_VERSION}
+
+      - name: Install gotestsum
+        run: go install gotest.tools/gotestsum@v1.12.2
+
+#      - name: Install Yaegi ${{ env.YAEGI_VERSION }}
+#        run: curl -sfL https://raw.githubusercontent.com/traefik/yaegi/master/install.sh | bash -s -- -b ${{ github.workspace }}/go/bin ${YAEGI_VERSION}
+
+      - name: Setup GOPATH
+        run: go env -w GOPATH=${{ github.workspace }}/go
+
+      - name: Lint Code
+        run: ${{ github.workspace }}/go/bin/golangci-lint run
+
+      - name: Test Code
+        run: gotestsum --format testname --junitfile junit.xml -- -coverprofile=cover.out ./...
+        env:
+          CGO_ENABLED: 1
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@18283e04ce6e62d37312384ff67231eb8fd56d24 # v5.4.3
+        with:
+          use_oidc: true
+
+      - name: Upload test results to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/test-results-action@47f89e9acb64b76debcd5ea40642d25a4adced9f # v1.1.1
+        with:
+          use_oidc: true
+
+# TODO: Enable Yaegi tests when figure out how to handle the requests to Cloudflare API.
+#      - name: Run tests with Yaegi
+#        run: yaegi test -v .
+#        env:
+#          GOPATH: ${{ github.workspace }}/go
